@@ -1,0 +1,161 @@
+from fastapi import APIRouter
+
+router = APIRouter(prefix="/gis", tags=["gis"])
+
+
+@router.get("/risk-map")
+def risk_map() -> dict:
+    """Return GeoJSON features for North Eastern Region (NER) landslide monitoring zones."""
+    features = [
+        {
+            "type": "Feature",
+            "properties": {
+                "district": "Mangan (North Sikkim)",
+                "state": "Sikkim",
+                "risk": "high",
+                "score": 0.89,
+                "rainfall_mm": 112.5,
+                "slope_deg": 41.2,
+                "soil_moisture_pct": 84.0,
+                "sensor_node": "NER-SK-01",
+                "status": "Red Alert - Evacuation Preparedness",
+            },
+            "geometry": {"type": "Point", "coordinates": [88.529, 27.505]},
+        },
+        {
+            "type": "Feature",
+            "properties": {
+                "district": "Gangtok",
+                "state": "Sikkim",
+                "risk": "medium",
+                "score": 0.54,
+                "rainfall_mm": 48.0,
+                "slope_deg": 28.5,
+                "soil_moisture_pct": 58.0,      
+                "sensor_node": "NER-SK-02",
+                "status": "Amber Watch - Routine Patrols",
+            },
+            "geometry": {"type": "Point", "coordinates": [88.613, 27.338]},
+        },
+        {
+            "type": "Feature",
+            "properties": {
+                "district": "Dima Hasao (Haflong)",
+                "state": "Assam",
+                "risk": "high",
+                "score": 0.85,
+                "rainfall_mm": 94.0,
+                "slope_deg": 36.8,
+                "soil_moisture_pct": 79.5,
+                "sensor_node": "NER-AS-01",
+                "status": "Red Alert - Railway Corridor Watch",
+            },
+            "geometry": {"type": "Point", "coordinates": [93.025, 25.176]},
+        },
+        {
+            "type": "Feature",
+            "properties": {
+                "district": "Cherrapunji (East Khasi Hills)",
+                "state": "Meghalaya",
+                "risk": "high",
+                "score": 0.91,
+                "rainfall_mm": 138.0,
+                "slope_deg": 38.0,
+                "soil_moisture_pct": 89.2,
+                "sensor_node": "NER-ML-01",
+                "status": "Red Alert - Extreme Precipitation",
+            },
+            "geometry": {"type": "Point", "coordinates": [91.732, 25.298]},
+        },
+        {
+            "type": "Feature",
+            "properties": {
+                "district": "Shillong",
+                "state": "Meghalaya",
+                "risk": "medium",
+                "score": 0.48,
+                "rainfall_mm": 42.0,
+                "slope_deg": 24.0,
+                "soil_moisture_pct": 51.0,
+                "sensor_node": "NER-ML-02",
+                "status": "Amber Watch - Steady Drainage",
+            },
+            "geometry": {"type": "Point", "coordinates": [91.893, 25.578]},
+        },
+        {
+            "type": "Feature",
+            "properties": {
+                "district": "Tawang",
+                "state": "Arunachal Pradesh",
+                "risk": "high",
+                "score": 0.81,
+                "rainfall_mm": 86.4,
+                "slope_deg": 43.5,
+                "soil_moisture_pct": 74.0,
+                "sensor_node": "NER-AR-01",
+                "status": "Red Alert - Mountain Pass Vulnerability",
+            },
+            "geometry": {"type": "Point", "coordinates": [91.868, 27.586]},
+        },
+        {
+            "type": "Feature",
+            "properties": {
+                "district": "Kohima (NH-29 Corridor)",
+                "state": "Nagaland",
+                "risk": "high",
+                "score": 0.79,
+                "rainfall_mm": 72.0,
+                "slope_deg": 35.0,
+                "soil_moisture_pct": 76.5,
+                "sensor_node": "NER-NL-01",
+                "status": "Red Alert - Highway Sinking Zone",
+            },
+            "geometry": {"type": "Point", "coordinates": [94.108, 25.675]},
+        },
+        {
+            "type": "Feature",
+            "properties": {
+                "district": "Noney (Tupul Sector)",
+                "state": "Manipur",
+                "risk": "high",
+                "score": 0.88,
+                "rainfall_mm": 98.0,
+                "slope_deg": 39.4,
+                "soil_moisture_pct": 82.0,
+                "sensor_node": "NER-MN-01",
+                "status": "Red Alert - Geotechnical Inclinometer Alarm",
+            },
+            "geometry": {"type": "Point", "coordinates": [93.601, 24.819]},
+        },
+        {
+            "type": "Feature",
+            "properties": {
+                "district": "Aizawl Slopes",
+                "state": "Mizoram",
+                "risk": "medium",
+                "score": 0.58,
+                "rainfall_mm": 54.0,
+                "slope_deg": 31.0,
+                "soil_moisture_pct": 62.0,
+                "sensor_node": "NER-MZ-01",
+                "status": "Amber Watch - Urban Ridge Settlement",
+            },
+            "geometry": {"type": "Point", "coordinates": [92.717, 23.730]},
+        },
+        {
+            "type": "Feature",
+            "properties": {
+                "district": "Agartala Plains",
+                "state": "Tripura",
+                "risk": "low",
+                "score": 0.16,
+                "rainfall_mm": 18.0,
+                "slope_deg": 7.0,
+                "soil_moisture_pct": 28.0,
+                "sensor_node": "NER-TR-01",
+                "status": "Green Clear - Low Vulnerability",
+            },
+            "geometry": {"type": "Point", "coordinates": [91.286, 23.831]},
+        },
+    ]
+    return {"type": "FeatureCollection", "features": features}

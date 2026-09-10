@@ -1,0 +1,321 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Giridrishti — Landslide Inventory & Early Warning, North Eastern Region</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@600;700;800&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&family=Noto+Sans+Devanagari:wght@400;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to content</a>
+
+<header>
+  <div class="wrap header-row">
+    <a class="brand" href="#top">
+      <svg class="brand-mark" viewBox="0 0 26 26" fill="none">
+        <path d="M2 20L10 6L14 13L17 8L24 20H2Z" fill="#C98A3B"/>
+        <path d="M2 20L10 6L14 13L17 8L24 20H2Z" stroke="#EDEFEF" stroke-opacity="0.25" stroke-width="0.6"/>
+      </svg>
+      <span class="brand-text">
+        <span class="brand-name">GIRIDRISHTI</span>
+        <span class="brand-tag" data-i18n="tag">Landslide inventory &amp; early warning, North Eastern Region</span>
+      </span>
+    </a>
+    <nav class="primary" aria-label="Primary">
+      <a href="#top" data-i18n="nav1">Overview</a>
+      <a href="#map" data-i18n="nav2">Map</a>
+      <a href="#hotspots" data-i18n="nav3">Hotspots</a>
+      <a href="#explorer" data-i18n="nav4">Explorer</a>
+      <a href="#demo" data-i18n="nav5">Demo</a>
+      <a href="/command-center/" style="color:var(--moderate-bright);font-weight:600;">Tactical Command Center &rarr;</a>
+    </nav>
+    <div class="header-right">
+      <div class="lang-toggle" role="group" aria-label="Language">
+        <button type="button" data-lang="en" aria-pressed="true">EN</button>
+        <button type="button" data-lang="hi" aria-pressed="false">हिं</button>
+        <button type="button" data-lang="kha" aria-pressed="false">KHA</button>
+      </div>
+      <div class="status-pill"><span class="status-dot"></span><span id="pillCount">recorded incidents</span></div>
+    </div>
+  </div>
+</header>
+
+<main id="main">
+
+  <!-- ================= HERO ================= -->
+  <section class="hero" id="top">
+    <div class="wrap">
+      <h1 data-i18n="h1">Every recorded landslide in the Northeast, in one place.</h1>
+      <p class="lede" data-i18n="lede">This prototype is built on a field-validated landslide inventory covering all eight north-eastern states, combined with a proposed real-time layer for rainfall, sensors, field reports and alerts.</p>
+
+      <div class="stat-grid">
+        <div class="stat-cell"><div class="num" id="statTotal">&mdash;</div><div class="label">recorded incidents in the inventory</div></div>
+        <div class="stat-cell"><div class="num" id="statStates">&mdash;</div><div class="label">states covered</div></div>
+        <div class="stat-cell"><div class="num" id="statDistricts">&mdash;</div><div class="label">districts represented</div></div>
+        <div class="stat-cell"><div class="num" id="statTopState" style="font-size:18px;">&mdash;</div><div class="label">most-recorded state</div></div>
+      </div>
+
+      <div class="cta-row">
+        <a class="btn btn-primary" href="#map" data-i18n="cta1">Explore the map</a>
+        <a class="btn btn-secondary" href="#explorer" data-i18n="cta2">Browse the inventory</a>
+      </div>
+      <p class="source-note"><strong>About this data.</strong> Records were extracted and cleaned from a 904-page field-validated landslide inventory document, filtered to the eight north-eastern states and de-duplicated. Coordinates, material and movement type come directly from that source. Rainfall, live sensor readings and the alerts shown further down are illustrative — they demonstrate the capability a deployed system would add on top of this real historical base.</p>
+    </div>
+  </section>
+
+  <!-- ================= MAP ================= -->
+  <section id="map">
+    <div class="wrap">
+      <div class="section-head">
+        <div>
+          <h2>The inventory, mapped</h2>
+          <p>Every point is plotted from its recorded coordinates. Colour it by state, material involved, or movement type.</p>
+        </div>
+      </div>
+
+      <div class="map-shell">
+        <div class="map-toolbar">
+          <div class="mode-toggle" id="mapModeToggle" role="group" aria-label="Colour by">
+            <button type="button" data-mode="state" aria-pressed="true">By state</button>
+            <button type="button" data-mode="material" aria-pressed="false">By material</button>
+            <button type="button" data-mode="movement" aria-pressed="false">By movement type</button>
+          </div>
+          <span class="map-count">Hover a point for detail</span>
+        </div>
+        <div class="map-canvas-wrap" id="mapCanvasWrap">
+          <canvas id="mapCanvas"></canvas>
+          <div class="map-tooltip" id="mapTooltip"></div>
+        </div>
+        <div class="legend" id="mapLegend"></div>
+        <div class="map-note">Positions are plotted directly from the inventory's recorded latitude and longitude, on a simple equirectangular projection. No basemap tiles are used.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= HOTSPOTS / ANALYTICS ================= -->
+  <section id="hotspots">
+    <div class="wrap">
+      <div class="section-head">
+        <div>
+          <h2>Where the record concentrates</h2>
+          <p>Counts drawn directly from the inventory: which states, districts, materials and movement types dominate the historical record.</p>
+        </div>
+      </div>
+
+      <div class="analytics-grid">
+        <div class="panel">
+          <h3>Recorded incidents by state</h3>
+          <div class="sub">All eight north-eastern states</div>
+          <div id="stateBars"></div>
+
+          <div class="two-col-mini">
+            <div>
+              <h3 style="margin-top:18px;">Material involved</h3>
+              <div class="sub">Top categories</div>
+              <div id="materialBars"></div>
+            </div>
+            <div>
+              <h3 style="margin-top:18px;">Movement type</h3>
+              <div class="sub">Top categories</div>
+              <div id="movementBars"></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="panel">
+          <h3>Top districts by recorded incidents</h3>
+          <div class="sub">Ranked, across all eight states</div>
+          <div id="hotspotList"></div>
+        </div>
+      </div>
+
+      <div class="panel" style="margin-top:18px;">
+        <h3>Incidents by year</h3>
+        <div class="sub" id="yearCaption">Loading…</div>
+        <canvas id="yearCanvas" class="year-chart"></canvas>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= EXPLORER ================= -->
+  <section id="explorer">
+    <div class="wrap">
+      <div class="section-head">
+        <div>
+          <h2>Browse the inventory</h2>
+          <p>Filter the full dataset by state, district, material or movement type, or search a place name directly.</p>
+        </div>
+      </div>
+
+      <div class="filter-bar">
+        <div class="filter-field">
+          <label for="filterState">State</label>
+          <select id="filterState"></select>
+        </div>
+        <div class="filter-field">
+          <label for="filterDistrict">District</label>
+          <select id="filterDistrict"></select>
+        </div>
+        <div class="filter-field">
+          <label for="filterMaterial">Material</label>
+          <select id="filterMaterial"></select>
+        </div>
+        <div class="filter-field">
+          <label for="filterMovement">Movement type</label>
+          <select id="filterMovement"></select>
+        </div>
+        <div class="filter-field">
+          <label for="filterSearch">Search place or location</label>
+          <input type="text" id="filterSearch" placeholder="e.g. NH-40, Sohra, Aizawl…">
+        </div>
+        <button type="button" class="filter-reset" id="filterReset">Reset</button>
+      </div>
+
+      <div class="result-meta">
+        <span id="resultMeta"></span>
+        <span>Showing 50 records per page</span>
+      </div>
+
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>State</th><th>District</th><th>Place / site</th><th>Material</th><th>Movement</th><th>Date on record</th><th>Coordinates</th>
+            </tr>
+          </thead>
+          <tbody id="resultsBody"></tbody>
+        </table>
+      </div>
+
+      <div class="pagination">
+        <button type="button" id="prevPage">Previous</button>
+        <span class="page-info" id="pageInfo"></span>
+        <button type="button" id="nextPage">Next</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= DEMO: PROPOSED CAPABILITIES ================= -->
+  <section id="demo">
+    <div class="wrap">
+      <div class="section-head">
+        <div>
+          <span class="section-tag">Concept demo</span>
+          <h2>What a deployed system adds on top</h2>
+          <p>The historical inventory tells you where landslides have happened. The features below are illustrative — a working demonstration of the real-time layer the full platform would provide: field reporting, alerting and hotspot advisories.</p>
+        </div>
+      </div>
+
+      <div class="demo-banner">These panels use sample or derived data, clearly separate from the verified historical inventory above.</div>
+
+      <h3 style="font-family:'IBM Plex Sans';font-weight:600;font-size:15px;margin-bottom:14px;">Historical hotspot advisories <span style="color:var(--text-3);font-weight:400;">— computed from the inventory, not a live feed</span></h3>
+      <div id="advisoryList" style="margin-bottom:40px;"></div>
+
+      <div class="report-grid">
+        <div class="report-copy">
+          <h2 style="font-size:clamp(22px,3vw,28px);">Anyone can report ground movement</h2>
+          <p>A crack in a retaining wall or debris on a road is often the earliest sign a sensor won't catch. Field officials and residents could send a report straight to the nearest control room, with or without a network connection.</p>
+          <div class="flow-steps">
+            <div class="flow-step"><span class="n">1</span><span class="t">Location is captured automatically from the device, no typing required.</span></div>
+            <div class="flow-step"><span class="n">2</span><span class="t">Attach a photo or short video of what's happening on the ground.</span></div>
+            <div class="flow-step"><span class="n">3</span><span class="t">Choose what you're seeing and add a line of context if you can.</span></div>
+            <div class="flow-step"><span class="n">4</span><span class="t">Submit. Without signal, the report queues and sends once you reconnect.</span></div>
+          </div>
+        </div>
+
+        <div class="report-form">
+          <form id="reportForm">
+            <div class="field">
+              <label for="uploadInput">Photo or video</label>
+              <label class="upload-zone" id="uploadZone" for="uploadInput">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 16V4M12 4l-4 4M12 4l4 4"/><path d="M4 16v3a2 2 0 002 2h12a2 2 0 002-2v-3"/></svg>
+                <span id="uploadLabel">Tap to attach, or drop a file here</span>
+                <input type="file" id="uploadInput" accept="image/*,video/*" class="visually-hidden">
+              </label>
+            </div>
+
+            <div class="field">
+              <label for="geoTag">Location</label>
+              <div class="geo-readout" id="geoTag">23.7271&deg; N, 92.7176&deg; E (Aizawl) &middot; captured automatically</div>
+            </div>
+
+            <div class="field">
+              <label for="category">What are you seeing</label>
+              <select id="category">
+                <option>Crack in slope or wall</option>
+                <option>Visible ground or debris movement</option>
+                <option>Road blocked or partially blocked</option>
+                <option>Water pooling on a slope</option>
+                <option>Something else</option>
+              </select>
+            </div>
+
+            <div class="field">
+              <label for="note">Note (optional)</label>
+              <textarea id="note" placeholder="A short line of context helps the response team."></textarea>
+            </div>
+
+            <div class="offline-row">
+              <span class="t">Simulate no network</span>
+              <label class="switch">
+                <input type="checkbox" id="offlineToggle">
+                <span class="track"></span><span class="thumb"></span>
+              </label>
+            </div>
+
+            <button type="submit" class="submit-btn">Send report</button>
+          </form>
+
+          <div class="tickets" id="ticketList">
+            <div class="ticket">
+              <div class="ticket-top"><span class="ticket-id">NER-4019</span><span class="ticket-time">18 min ago</span></div>
+              <div class="ticket-body">Crack in hillside near NH-54 &middot; Kohima, Nagaland</div>
+              <span class="ticket-tag">Routed: Kohima district control room</span>
+            </div>
+            <div class="ticket">
+              <div class="ticket-top"><span class="ticket-id">NER-4017</span><span class="ticket-time">40 min ago</span></div>
+              <div class="ticket-body">Debris on carriageway &middot; Lunglei, Mizoram</div>
+              <span class="ticket-tag">Routed: Lunglei district control room</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= SOURCES ================= -->
+  <section id="sources" style="padding:32px 0;">
+    <div class="wrap">
+      <div class="sources">
+        <span><strong>Historical inventory</strong> &middot; field-validated landslide records (this prototype's real data source)</span>
+        <span><strong>Rainfall</strong> &middot; proposed: IMD radar and forecast API</span>
+        <span><strong>Satellite</strong> &middot; proposed: ISRO Bhuvan change detection</span>
+        <span><strong>River levels</strong> &middot; proposed: CWC gauge network</span>
+        <span><strong>Ground sensors</strong> &middot; proposed: soil moisture and tilt, State PWD / BRO</span>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <div class="wrap footer-row">
+    <div class="footer-brand">
+      <div class="brand-name" style="font-family:'Big Shoulders Display';">GIRIDRISHTI</div>
+      <p>A landslide inventory and early-warning concept for the North Eastern Region, built for district administrations, field officials and the villages they serve.</p>
+    </div>
+    <div class="footer-right">
+      <p>Prototype for a Smart India Hackathon submission to the Ministry of Development of North Eastern Region (MDoNER).</p>
+      <p>The map, hotspot and explorer sections use real historical incident records. The alert log and field-report feed under "Demo" are illustrative mockups of proposed live functionality.</p>
+    </div>
+  </div>
+</footer>
+
+<script src="data.js"></script>
+<script src="script.js"></script>
+</body>
+</html>

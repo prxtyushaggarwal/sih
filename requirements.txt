@@ -1,0 +1,9 @@
+fastapi
+uvicorn
+geopandas
+scikit-learn
+pandas
+sqlalchemy
+pydantic
+celery
+flask
